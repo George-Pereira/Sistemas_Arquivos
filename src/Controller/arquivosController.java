@@ -1,5 +1,6 @@
 package Controller;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +17,30 @@ public class arquivosController implements IArquivosController
 	@Override
 	public void leDir(String caminho) throws IOException 
 	{
-		
+		File dir = new File(caminho);
+		if(dir.isDirectory() && dir.exists()) 
+		{
+			File [] vetArquivos = dir.listFiles();//vetor de files - só abriu o diretorio
+			for(File f: vetArquivos) //for each 
+			{
+				if(f.isDirectory()) 
+				{
+					System.out.println("[" + f.getName()+"]");
+				}
+			}
+			for(File f: vetArquivos)
+			{
+				if(f.isFile()) 
+				{
+					//leArquivo(f.getAbsolutePath(), f.getName()); permite ler qualquer arquivo
+					System.out.println(f.getName());
+				}
+			}
+		}
+		else 
+		{
+			throw new IOException("Dir. Inválido");
+		}
 	}
 
 	@Override
@@ -80,7 +104,16 @@ public class arquivosController implements IArquivosController
 	@Override
 	public void abreArquivo(String caminho, String nome) throws IOException 
 	{
-		
+		Desktop desk = Desktop.getDesktop(); //pega caracteristicas relevantes do sistema de arquivos do Sistema Operacional
+		File arq = new File (caminho, nome);
+		if(arq.isFile() && arq.exists()) 
+		{
+			desk.open(arq);
+		}
+		else 
+		{
+			throw new IOException("Arquivo Inválido");
+		}
 	}
 	
 }
